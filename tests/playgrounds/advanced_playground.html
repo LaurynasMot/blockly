@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <title>Advanced Blockly Playground</title>
+
 <script src="../../blockly_uncompressed.js"></script>
+
 <script src="../../generators/javascript.js"></script>
 <script src="../../generators/javascript/logic.js"></script>
 <script src="../../generators/javascript/loops.js"></script>
@@ -26,6 +28,7 @@
 <script src="../../generators/python/procedures.js"></script>
 <script src="../../generators/php.js"></script>
 <script src="../../generators/php/logic.js"></script>
+<script src="custom_generator.js"></script>
 <script src="../../generators/php/loops.js"></script>
 <script src="../../generators/php/math.js"></script>
 <script src="../../generators/php/text.js"></script>
@@ -81,7 +84,7 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
-
+var workspace = null;
 function start() {
   setBackgroundColour();
   initPlayground();
@@ -90,11 +93,83 @@ function start() {
 function createWorkspace(blocklyDiv, options) {
   var workspace = Blockly.inject(blocklyDiv, options);
   workspace.configureContextMenu = configureContextMenu.bind(workspace);
+  
+  workspace.registerButtonCallback('asmButton', function() {
+		var code = Blockly.RISCV.workspaceToCode(workspace);
+		var blob = new Blob([code],
+			{ type: "text/plain;charset=utf-8" });
+
+		const a = document.createElement('a');
+		var date = new Date();
+		a.download = date.toJSON().slice(0,10).split`-`.join`` + date.getHours() + date.getMinutes() + ".asm";
+		a.href= URL.createObjectURL(blob);
+		a.click();
+
+		URL.revokeObjectURL(a.href);
+	})
+			
+	workspace.registerButtonCallback('txtButton', function() {
+		var code = Blockly.RISCV.workspaceToCode(workspace);
+		var blob = new Blob([code],
+			{ type: "text/plain;charset=utf-8" });
+
+		const a = document.createElement('a');
+		var date = new Date();
+		a.download = date.toJSON().slice(0,10).split`-`.join`` + date.getHours() + date.getMinutes() + ".txt";
+		a.href= URL.createObjectURL(blob);
+		a.click();
+
+		URL.revokeObjectURL(a.href);
+	})
+	
+	workspace.registerButtonCallback('cpyButton', function() {
+		var code = Blockly.RISCV.workspaceToCode(workspace);
+		
+		const el = document.createElement('textarea');
+		el.value = code;
+		document.body.appendChild(el);
+		el.select();
+		document.execCommand('copy');
+		document.body.removeChild(el);
+	})
+	
+	workspace.registerButtonCallback('xmlButton', function() {
+		var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+		var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+		
+		var blob = new Blob([xmlText],
+			{ type: "text/plain;charset=utf-8" });
+
+		const a = document.createElement('a');
+		var date = new Date();
+		a.download = date.toJSON().slice(0,10).split`-`.join`` + date.getHours() + date.getMinutes() + ".xml";
+		a.href= URL.createObjectURL(blob);
+		a.click();
+
+		URL.revokeObjectURL(a.href);
+	})
+	
+	workspace.registerButtonCallback('importXmlButton', function() {
+		var txt;
+		var xml = prompt("Please paste the xml file content:");
+		if (xml == null || xml == "") {
+			console.log("User cancelled the prompt.");
+		} else {
+			try {
+				var xmlText = Blockly.Xml.textToDom(xml);
+				Blockly.Xml.domToWorkspace(xmlText, workspace);
+			} catch (e) {
+				alert("Invalid xml");
+			}
+
+		}
+	})
   return workspace;
 }
 
 function configurePlayground(playground) {
   // Rendering options.
+  playground.addGenerator('RISC V', codelabGenerator);
   var gui = playground.getGUI();
   var renderingFolder = gui.addFolder('Rendering');
   var renderingOptions = {
@@ -141,7 +216,7 @@ function initPlayground() {
           drag: true,
           wheel: false,
         },
-        toolbox: toolboxCategories,
+        toolbox: codelabToolbox,
         toolboxPosition: 'start',
         renderer: 'geras',
         zoom:
@@ -195,6 +270,20 @@ function configureContextMenu(menuOptions, e) {
   menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
 
+var run = function(){
+    var code = Blockly.RISCV.workspaceToCode(workspace);
+	var blob = new Blob([code],
+		{ type: "text/plain;charset=utf-8" });
+
+	const a = document.createElement('a');
+	var date = new Date();
+	a.download = date.toJSON().slice(0,10).split`-`.join`` + date.getHours() + date.getMinutes() + ".asm";
+	a.href= URL.createObjectURL(blob);
+	a.click();
+
+	URL.revokeObjectURL(a.href);
+}
+
 </script>
 
 <style>
@@ -220,6 +309,8 @@ function configureContextMenu(menuOptions, e) {
 </style>
 </head>
 <body onload="start()">
+
   <div id="root"></div>
+
 </body>
 </html>

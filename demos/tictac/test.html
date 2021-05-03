@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Tic - Tac - Toe</title>
+	<script src="../../blockly_compressed.js"></script>
+	<script src="../../blocks_compressed.js"></script>
+	<script src="../../msg/js/en.js"></script>
+	<script src="../../javascript_compressed.js"></script>
+    <script>
+
+    // Global variables.
+    var turn;
+    var content = [];
+    var winningCombinations = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]];
+
+    // Initialize the game.
+    function init() {
+      turn = 0;
+      for(var i = 0; i < 9; i++) {
+        content[i] = '';
+        var c = document.getElementById('canvas' + i);
+        c.width = c.width;
+      }
+    }
+
+    // Play on the specified square.
+    function canvasClicked(canvasNumber) {
+      if (content[canvasNumber]) {
+        alert('THAT SPACE IS ALREADY OCCUPIED!');
+        return;
+      }
+
+      var c = document.getElementById('canvas' + canvasNumber);
+      var cxt = c.getContext('2d');
+      cxt.beginPath();
+      if (turn % 2 == 0) {
+        cxt.moveTo(10, 10);
+        cxt.lineTo(40, 40);
+        cxt.moveTo(40, 10);
+        cxt.lineTo(10, 40);
+        content[canvasNumber] = 'X';
+      } else {
+        cxt.arc(25, 25, 20, 0, Math.PI * 2, true);
+        content[canvasNumber] = 'O';
+      }
+      cxt.lineWidth = 2;
+      cxt.stroke();
+      cxt.closePath();
+
+      turn++;
+      if (turn == 9) {
+        alert('THE GAME IS OVER!');
+        init();
+      } else {
+        checkForWinners(content[canvasNumber]);
+      }
+    }
+
+    // Has a player won?
+    function checkForWinners(symbol) {
+      for (var a = 0; a < winningCombinations.length; a++) {
+        if (content[winningCombinations[a][0]] == symbol &&
+            content[winningCombinations[a][1]] == symbol &&
+            content[winningCombinations[a][2]] == symbol) {
+          alert(symbol + ' WON!');
+          init();
+        }
+      }
+    }
+
+    window.onload = init;
+    </script>
+  </head>
+  <body>
+    <h2>Tic - Tac - Toe</h2>
+    <canvas id="canvas0" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(0)"></canvas>
+    <canvas id="canvas1" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(1)"></canvas>
+    <canvas id="canvas2" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(2)"></canvas><br/>
+    <canvas id="canvas3" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(3)"></canvas>
+    <canvas id="canvas4" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(4)"></canvas>
+    <canvas id="canvas5" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(5)"></canvas><br/>
+    <canvas id="canvas6" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(6)"></canvas>
+    <canvas id="canvas7" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(7)"></canvas>
+    <canvas id="canvas8" width="50" height="50" style="border:1px solid black" onclick="canvasClicked(8)"></canvas>
+
+    <p>
+      Based on <a href="http://www.dreamincode.net/forums/topic/247361-simple-tic-tac-toe-using-html5-css3-and-javascript/">Simple Tic - Tac - Toe</a>
+      by Monomania.
+    </p>
+	<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+<xml id="toolbox" style="display: none">
+  <category name="Logic">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    <block type="logic_null"></block>
+    <block type="logic_ternary"></block>
+  </category>
+  <category name="Tic-Tac-Toe">
+  <block type="ttt_set"></block>
+  <block type="ttt_get"></block>
+</category>
+
+  <category name="Loops">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <block type="math_number">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    <block type="controls_for">
+      <value name="FROM">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <value name="BY">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_forEach"></block>
+    <block type="controls_flow_statements"></block>
+  </category>
+  <category name="Math">
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="math_single"></block>
+    <block type="math_trig"></block>
+    <block type="math_constant"></block>
+    <block type="math_number_property"></block>
+    <block type="math_change">
+      <value name="DELTA">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_round"></block>
+    <block type="math_on_list"></block>
+    <block type="math_modulo"></block>
+    <block type="math_constrain">
+      <value name="LOW">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="HIGH">
+        <block type="math_number">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
+  <category name="Text">
+    <block type="text"></block>
+    <block type="text_join"></block>
+    <block type="text_append">
+      <value name="TEXT">
+        <block type="text"></block>
+      </value>
+    </block>
+    <block type="text_length"></block>
+    <block type="text_isEmpty"></block>
+    <block type="text_indexOf">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_charAt">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_getSubstring">
+      <value name="STRING">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_changeCase"></block>
+    <block type="text_trim"></block>
+    <block type="text_print"></block>
+    <block type="text_prompt_ext">
+      <value name="TEXT">
+        <block type="text"></block>
+      </value>
+    </block>
+  </category>
+  <category name="Lists">
+    <block type="lists_create_empty"></block>
+    <block type="lists_create_with"></block>
+    <block type="lists_repeat">
+      <value name="NUM">
+        <block type="math_number">
+          <field name="NUM">5</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_length"></block>
+    <block type="lists_isEmpty"></block>
+    <block type="lists_indexOf">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getIndex">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_setIndex">
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getSublist">
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+  </category>
+  
+  <category name="Variables" custom="VARIABLE"></category>
+  <category name="Functions" custom="PROCEDURE"></category>
+</xml>
+<script>
+  var workspace = Blockly.inject('blocklyDiv',
+      {toolbox: document.getElementById('toolbox')});
+</script>
+<button onclick="runJS()">Run Code</button>
+<script>
+  function runJS() {
+    Blockly.JavaScript.addReservedWords('code');
+    var code = Blockly.JavaScript.workspaceToCode();
+    alert(code);
+    try {
+      eval(code);
+    } catch (e) {
+      alert(e);
+    }
+  }Blockly.Blocks['ttt_set'] = {
+  init: function() {
+    this.appendValueInput("SQUARE")
+        .setCheck("Number")
+        .appendField("play in square");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(330);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['ttt_get'] = {
+  init: function() {
+    this.appendValueInput("SQUARE")
+        .setCheck("Number")
+        .appendField("symbol in square");
+    this.setInputsInline(false);
+    this.setOutput(true, "String");
+    this.setColour(330);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.JavaScript['ttt_set'] = function(block) {
+  var value_square = Blockly.JavaScript.valueToCode(block, 'SQUARE', Blockly.JavaScript.ORDER_ATOMIC);
+var code = 'canvasClicked(' + value_square + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['ttt_get'] = function(block) {
+  var value_square = Blockly.JavaScript.valueToCode(block, 'SQUARE', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'content[' + value_square + ']';
+
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+</script>
+
+
+  </body>
+</html>
