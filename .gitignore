@@ -1,4 +1,5 @@
-node_modules
+node_modules/*
+!node_modules/@blockly/
 npm-debug.log
 build-debug.log
 .DS_Store
