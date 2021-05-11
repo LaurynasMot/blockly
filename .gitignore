@@ -20,3 +20,4 @@ chromedriver
 typings/tmp/*
 dist/*
 !dist/index.html
+!dist/temp/
