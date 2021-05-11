@@ -3903,6 +3903,7 @@ var codelabToolbox = `
 <button text="Copy code to clipboard" callbackKey="cpyButton"></button>
 <button text="Save blocks to .xml" callbackKey="xmlButton"></button>
 <button text="Import blocks from .xml" callbackKey="importXmlButton"></button>
+<button text="Load sample program" callbackKey="loadSampleProgram"></button>
 </category>
 
 <!--<block type="logic_boolean"><field name="BOOL">TRUE</field></block>-->
