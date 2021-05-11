@@ -21,3 +21,4 @@ typings/tmp/*
 dist/*
 !dist/index.html
 !dist/temp/
+!dist/blockly_uncompressed.js
