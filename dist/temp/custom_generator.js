@@ -3708,7 +3708,7 @@ Blockly.defineBlocksWithJsonArray([{
 },
 {
 	"type": "loopWithReturn",
-	"message0": "loop name: %1 %2 %3 and return",
+	"message0": "label name: %1 %2 %3 and return",
 	"args0": [
 		{
 			"type": "input_value",
@@ -3729,7 +3729,7 @@ Blockly.defineBlocksWithJsonArray([{
 },
 {
 	"type": "loopWithoutReturn",
-	"message0": "loop name: %1 %2 %3",
+	"message0": "label name: %1 %2 %3",
 	"args0": [
 		{
 			"type": "input_value",
@@ -3905,10 +3905,6 @@ var codelabToolbox = `
 <button text="Import blocks from .xml" callbackKey="importXmlButton"></button>
 <button text="Load sample program" callbackKey="loadSampleProgram"></button>
 </category>
-
-<!--<block type="logic_boolean"><field name="BOOL">TRUE</field></block>-->
-<!--<block type="logic_null"/>-->
-<!--<block type="lists_create_with"><mutation items="3"/></block>-->
 </xml>
 `
 
@@ -3916,10 +3912,6 @@ const codelabGenerator = new Blockly.Generator('RISC V');
 codelabGenerator.PRECEDENCE = 0;
 
 Blockly.RISCV = codelabGenerator;
-
-codelabGenerator['logic_null'] = function(block) {
-  return ['null', codelabGenerator.PRECEDENCE];
-};
 
 codelabGenerator['text'] = function(block) {
   var textValue = block.getFieldValue('TEXT');
@@ -3935,11 +3927,6 @@ codelabGenerator['hex'] = function(block) {
 
 codelabGenerator['math_number'] = function(block) {
   const code = Number(block.getFieldValue('NUM'));
-  return [code, codelabGenerator.PRECEDENCE];
-};
-
-codelabGenerator['logic_boolean'] = function(block) {
-  const code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
   return [code, codelabGenerator.PRECEDENCE];
 };
 
